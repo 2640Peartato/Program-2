@@ -7,11 +7,12 @@
 
 .data 
 menu: .asciiz "~~~~~~~~~~~~~~Main Menu~~~~~~~~~~~~~~\n(1)Get Letter Grade \n(2)Exit program \n"
-menuChoice: .asciiz "\n Enter '1' or '2' for your selection: "
-instruction: .asciiz "\n Please enter a score as an integer value: "
-returnScore: .asciiz "\n The grade is: "
-newScore: .asciiz "\n Would you like to enter a new score? \n (Y)Yes  (N)No"
-newScoreSelection: .asciiz "Enter 'Y' or 'N' for your selection: "
+menuChoice: .asciiz "\nEnter '1' or '2' for your selection: "
+instruction: .asciiz "\nPlease enter a score as an integer value: "
+returnScore: .asciiz "\nThe grade is: "
+newScore: .asciiz "\nWould you like to enter a new score? \n (Y)Yes  (N)No"
+newScoreSelection: .asciiz "\nEnter 'Y' or 'N' for your selection: "
+exitMessage: .asciiz "\nThe program will now exit."
 .text
 main:
 
@@ -30,10 +31,29 @@ Menu:
 	syscall
 	move $t7, $v0
 	
+	#If one is picked move onto the integer input
+	beq $t7, 1, Score
 	
-
-
+	#If two is picked then exit program
+	beq $t7, 2, exit
+	
+Score:
+	#print out instruction for integer input
+	li $v0, 4
+	la $a0, instruction
+	syscall
+	
+	li $v0, 5
+	syscall
+	move $t6, $v0
 
 exit:
+
+	#print out exit message
+	li $v0, 4
+	la $a0, exitMessage
+	syscall
+	
+	#exit the program
 	li $v0, 10
 	syscall
