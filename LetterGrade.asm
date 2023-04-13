@@ -6,13 +6,16 @@
 # - invalid input handling
 
 .data 
-menu: .asciiz "~~~~~~~~~~~~~~Main Menu~~~~~~~~~~~~~~\n(1)Get Letter Grade \n(2)Exit program \n"
+menu: .asciiz "\n~~~~~~~~~~~~~~Main Menu~~~~~~~~~~~~~~\n(1)Get Letter Grade \n(2)Exit program \n"
 menuChoice: .asciiz "\nEnter '1' or '2' for your selection: "
 instruction: .asciiz "\nPlease enter a score as an integer value: "
 returnScore: .asciiz "\nThe grade is: "
 newScore: .asciiz "\n\nWould you like to enter a new score? \n (Y)Yes  (N)No \n"
 newScoreSelection: .asciiz "\nEnter 'Y' or 'N' for your selection: "
 exitMessage: .asciiz "\nThe program will now exit."
+
+#buffer for yes or no loop
+yesOrNo: .space 32
 
 #Letter Grades:
 a: .asciiz "A"
@@ -141,12 +144,20 @@ moreGrade:
 	syscall
 	
 	#get selection
+	li $v0, 8
+	la $a0, yesOrNo
+	li $a1, 2
+	syscall
 
+	lb $t5, 0($a0)
+	
 	#if Y/y is picked then move to Score
-
+	beq $t5, 'Y', Score
+	beq $t5, 'y', Score
 	#if N/n is picked then move to Menu
-
-
+	beq $t5, 'N', Menu
+	beq $t5, 'n', Menu
+	
 	j moreGrade
 exit:
 
