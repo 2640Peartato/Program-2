@@ -10,7 +10,7 @@ menu: .asciiz "~~~~~~~~~~~~~~Main Menu~~~~~~~~~~~~~~\n(1)Get Letter Grade \n(2)E
 menuChoice: .asciiz "\nEnter '1' or '2' for your selection: "
 instruction: .asciiz "\nPlease enter a score as an integer value: "
 returnScore: .asciiz "\nThe grade is: "
-newScore: .asciiz "\nWould you like to enter a new score? \n (Y)Yes  (N)No"
+newScore: .asciiz "\n\nWould you like to enter a new score? \n (Y)Yes  (N)No \n"
 newScoreSelection: .asciiz "\nEnter 'Y' or 'N' for your selection: "
 exitMessage: .asciiz "\nThe program will now exit."
 
@@ -45,9 +45,7 @@ Menu:
 	#If two is picked then exit program
 	beq $t7, 2, exit
 	
-	
-	
-	
+	j Menu
 Score:
 	#print out instruction for integer input
 	li $v0, 4
@@ -82,7 +80,7 @@ A:
 	la $a0, a
 	syscall
 	
-	j exit
+	j moreGrade
 	
 B:
 	
@@ -95,7 +93,7 @@ B:
 	la $a0, b
 	syscall
 	
-	j exit
+	j moreGrade
 C:
 	#display letter grade
 	li $v0, 4
@@ -106,7 +104,7 @@ C:
 	la $a0, c
 	syscall
 
-	j exit
+	j moreGrade
 D:
 
 	#display letter grade
@@ -118,7 +116,7 @@ D:
 	la $a0, d
 	syscall
 	
-	j exit
+	j moreGrade
 	
 F:
 	li $v0, 4
@@ -129,8 +127,27 @@ F:
 	la $a0, f
 	syscall
 	
-	j exit
+	j moreGrade
 	
+moreGrade:
+	#print out option for new score
+	li $v0, 4
+	la $a0, newScore
+	syscall
+	
+	#print out new score selection
+	li $v0, 4
+	la $a0, newScoreSelection
+	syscall
+	
+	#get selection
+
+	#if Y/y is picked then move to Score
+
+	#if N/n is picked then move to Menu
+
+
+	j moreGrade
 exit:
 
 	#print out exit message
