@@ -23,6 +23,7 @@ b: .asciiz "B"
 c: .asciiz "C"
 d: .asciiz "D"
 f: .asciiz "F"
+tryAgain: .asciiz "\nGrade cannot be below 0!"
 
 .text
 main:
@@ -64,17 +65,19 @@ Score:
 	li $t1, 80	#cutoff for B
 	li $t2, 70	#cutoff for C
 	li $t3, 60	#cutoff for D
+	li $t5, -1	#cutoff for valid input
 	
 	#bge -> branch on greater than or equal based on grade conditions:
 	bge $t6, $t0, A		#if the grade is >= 90 branches to A
 	bge $t6, $t1, B		#if the grade is >= 80 branches to B
 	bge $t6, $t2, C		#if the grade is >= 70 branches to C
 	bge $t6, $t3, D		#if the grade is >= 60 branches to D
+	bge $t6, $zero, F	#if the grade is within 0-59 branches to F
 	
-	j F	#jump to F if grade is lower than 60
+	ble $t6, $t5, invalid	#if grade is below zero (invalid), branches to the menu
 	
 A: 
-	#display A grade:
+	#display letter grade 'A'
 	li $v0, 4
 	la $a0, returnScore
 	syscall
@@ -87,7 +90,7 @@ A:
 	
 B:
 	
-	#display A grade:
+	#display letter grade 'B'
 	li $v0, 4
 	la $a0, returnScore
 	syscall
@@ -98,7 +101,7 @@ B:
 	
 	j moreGrade
 C:
-	#display letter grade
+	#display letter grade 'C'
 	li $v0, 4
 	la $a0, returnScore
 	syscall
@@ -110,7 +113,7 @@ C:
 	j moreGrade
 D:
 
-	#display letter grade
+	#display letter grade 'D'
 	li $v0, 4
 	la $a0, returnScore
 	syscall
@@ -122,12 +125,22 @@ D:
 	j moreGrade
 	
 F:
+	#display letter grade 'F'
 	li $v0, 4
 	la $a0, returnScore
 	syscall
 	
 	li $v0, 4
 	la $a0, f
+	syscall
+	
+	j moreGrade
+
+invalid:
+
+	#display message
+	li $v0, 4
+	la $a0, tryAgain
 	syscall
 	
 	j moreGrade
