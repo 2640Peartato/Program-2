@@ -61,7 +61,7 @@ loop:
 	j loop
 
 negloop:
-	div.s $t2, $t0
+	div $t2, $t0
 	
 	#increment loop counter
 	subi $t7, $t7, 1
