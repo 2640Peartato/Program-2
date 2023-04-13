@@ -44,8 +44,7 @@ main:
 	syscall
 	move $t1, $v0 #users 'y' stored in $t1
 	beqz $t1, result #checks if exponent is 0
-	
-	#might need to make separate loops if negative exponenets are used
+	bltz $t1, negloop
 	
 	j loop
 	
@@ -60,6 +59,16 @@ loop:
 	beq $t7, $t1, result
 	
 	j loop
+
+negloop:
+	div.s $t2, $t0
+	
+	#increment loop counter
+	subi $t7, $t7, 1
+	#break out of the loop when counter matches the number of elements
+	beq $t7, $t1, result
+	
+	j negloop
 
 result: 
 	#print out result
